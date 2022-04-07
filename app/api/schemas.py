@@ -7,9 +7,10 @@ class Shortener(BaseModel):
     url: HttpUrl
 
 
-class ShortenerReadOnly(Shortener):
+class ShortenerRead(BaseModel):
     id: int
-    shortcode: str
+    url: HttpUrl
+    code: str
     created_at: datetime
 
     class Config:
