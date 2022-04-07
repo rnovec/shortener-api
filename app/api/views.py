@@ -1,15 +1,18 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 
-from .schemas import Shortener, ShortenerReadOnly
+from app.database.config import get_session
+
+from . import controllers, schemas
 
 router = APIRouter()
 
 
-@router.post("/", response_model=Shortener)
-def create_shortener(url: str):
-    pass
+@router.post("/", response_model=schemas.ShortenerRead, status_code=201)
+def create_shortener(data: schemas.Shortener, db: Session = Depends(get_session)):
+    return controllers.create_shortener(db=db, payload=data)
 
 
-@router.get("/{shortcode}", response_model=ShortenerReadOnly)
-def retrieve_shortener(shortcode: str):
+@router.get("/{shortcode}", response_model=schemas.ShortenerRead)
+def retrieve_shortener(shortcode: str, db: Session = Depends(get_session)):
     pass
