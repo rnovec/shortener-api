@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.database.config import get_session
@@ -15,4 +15,7 @@ def create_shortener(data: schemas.Shortener, db: Session = Depends(get_session)
 
 @router.get("/{shortcode}", response_model=schemas.ShortenerRead)
 def retrieve_shortener(shortcode: str, db: Session = Depends(get_session)):
-    pass
+    shortener = controllers.get_shortener_by_code(db, code=shortcode)
+    if shortener is None:
+        raise HTTPException(status_code=404, detail="Shortener not found")
+    return shortener

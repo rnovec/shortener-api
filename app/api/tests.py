@@ -34,3 +34,24 @@ def test_create_shortcode_url_wrong_format():
     assert "detail" in data
     assert "msg" in data["detail"][0]
     assert data["detail"][0]["msg"] == "invalid or missing URL scheme"
+
+
+def test_get_url_by_shortcode():
+    """Test endpoint to get existing by shortcode"""
+    response = client.post("/", json={"url": url})
+    data = response.json()
+
+    shortcode = data.get("code")
+    response = client.get(f"/{shortcode}")
+    assert response.status_code == 200
+    assert "url" in response.json()
+    assert url == response.json()["url"]
+
+
+def test_get_unexisting_shortener():
+    """Test endpoint to retrieve unexisting shortener and returns 404"""
+    response = client.get(f"/12345")
+    data = response.json()
+    assert response.status_code == 404
+    assert "detail" in data
+    assert data["detail"] == "Shortener not found"

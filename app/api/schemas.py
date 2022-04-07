@@ -7,8 +7,9 @@ class Shortener(BaseModel):
     url: HttpUrl
 
 
-class ShortenerRead(Shortener):
+class ShortenerRead(BaseModel):
     id: int
+    url: HttpUrl
     code: str
     created_at: datetime
 
