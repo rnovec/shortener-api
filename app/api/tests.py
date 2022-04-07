@@ -23,3 +23,14 @@ def test_create_shortcode_url():
     assert response.status_code == 201
     assert "url" in shortener
     assert "code" in shortener
+
+
+def test_create_shortcode_url_wrong_format():
+    """Test endpoint to generate a shortcode with url in bad format"""
+    url = "string"
+    response = client.post("/", json={"url": url})
+    data = response.json()
+    assert response.status_code == 422
+    assert "detail" in data
+    assert "msg" in data["detail"][0]
+    assert data["detail"][0]["msg"] == "invalid or missing URL scheme"
