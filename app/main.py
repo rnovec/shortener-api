@@ -5,7 +5,7 @@ from app.api import api_router
 from app.database.config import Base, engine
 
 Base.metadata.create_all(bind=engine)
-app = FastAPI(openapi_prefix="")
+app = FastAPI(title="Shortener API", version="1.0.0", openapi_prefix="")
 
 app.include_router(api_router)
 
